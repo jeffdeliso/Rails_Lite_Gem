@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+require 'rack'
+require_relative '../lib/router'
+require_relative '../config/routes'
+require_relative '../app/models/application_model'
+require_relative '../app/models/cat'
+require_relative '../app/models/user'
+require_relative '../app/models/house'
+require_relative '../app/controllers/application_controller'
+require_relative '../app/controllers/cats_controller'
+require_relative '../app/controllers/users_controller'
+require_relative '../app/controllers/sessions_controller'
+# require_relative '../controllers/houses_controller'
+
+router = Router.new
+create_routes(router)
+
+app = Proc.new do |env|
+  req = Rack::Request.new(env)
+  res = Rack::Response.new
+  router.run(req, res)
+  res.finish
+end
+
+Rack::Server.start(
+ app: app,
+ Port: 3000
+)

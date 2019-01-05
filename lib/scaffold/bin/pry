@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+require 'pry'
+require 'rack'
+require_relative '../lib/router'
+require_relative '../models/application_model'
+require_relative '../models/cat'
+require_relative '../models/user'
+require_relative '../models/house'
+require_relative '../controllers/application_controller'
+require_relative '../controllers/cats_controller'
+require_relative '../controllers/users_controller'
+require_relative '../controllers/sessions_controller'
+# require_relative '../controllers/houses_controller'
+
+Pry.start(__FILE__)
