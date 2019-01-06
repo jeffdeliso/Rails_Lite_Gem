@@ -5,8 +5,8 @@ module RailsLite
 
   class CLI < Thor
     desc "new", "Creates a new rails lite project"
-    method_options :string
-    def new(name = "new_app")
+    def new(*words = ['new', 'app'])
+      name = words.join('_')
       directory = File.dirname(__FILE__)
       source = File.join(directory, "..", "scaffold")
       FileUtils.cp_r source, FileUtils.pwd
