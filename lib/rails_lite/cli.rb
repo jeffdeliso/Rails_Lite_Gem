@@ -5,6 +5,7 @@ module RailsLite
 
   class CLI < Thor
     desc "new", "Creates a new rails lite project"
+    method_option aliases: "n"
     def new(*words)
       words = ['new', 'app'] if words.empty?
       name = words.join('_')
@@ -12,6 +13,18 @@ module RailsLite
       source = File.join(directory, "..", "scaffold")
       FileUtils.cp_r source, FileUtils.pwd
       FileUtils.mv(File.join(FileUtils.pwd, "scaffold"), File.join(FileUtils.pwd, name))
+    end
+
+    desc "server", "Starts the rails lite server"
+    method_option aliases: "s"
+    def server
+      root = FileUtils.pwd
+      file_name = File.join(root, 'bin', 'server')
+      if File.exist?(file_name)
+        system('bin/server')
+      else
+        puts "error"
+      end
     end
   end
 end
