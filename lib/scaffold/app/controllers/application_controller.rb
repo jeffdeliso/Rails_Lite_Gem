@@ -1,4 +1,4 @@
-require_relative '../../lib/controller_base'
+require_relative '../../lib/controller/controller_base'
 
 class ApplicationController < ControllerBase
 
@@ -19,7 +19,7 @@ class ApplicationController < ControllerBase
   def ensure_logout
     if logged_in?
       flash[:errors] = ['already logged in']
-      redirect_to cats_url
+      redirect_to users_url
       true
     else
       false
@@ -29,7 +29,6 @@ class ApplicationController < ControllerBase
   def login(user)
     @current_user = user
     session[:session_token] = user.reset_token!
-    session[:session_token]
   end
 
   def logout

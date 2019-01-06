@@ -1,12 +1,12 @@
-require_relative 'db_connection'
-require_relative 'searchable'
-require_relative 'associatable'
-require_relative 'validations'
-require_relative 'relation'
-require_relative 'model_callbacks'
+require_relative './db_connection'
+require_relative './relations/searchable'
+require_relative './associations/associatable'
+require_relative './validations/validations'
+require_relative './relations/relation'
+require_relative './model_callbacks'
 require 'active_support/inflector'
 
-class SQLObject
+class ModelBase
   extend Searchable
   extend Associatable
   include Validations

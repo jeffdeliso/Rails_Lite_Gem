@@ -37,4 +37,5 @@ class StrongParams
   def []=(key, val)
     params[key.to_sym] = val
   end
+  
 end

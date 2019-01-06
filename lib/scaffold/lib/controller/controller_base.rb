@@ -2,8 +2,8 @@ require 'active_support'
 require 'active_support/core_ext'
 require 'erb'
 require 'active_support/inflector'
-require_relative './session'
-require_relative './flash'
+require_relative './cookies/session'
+require_relative './cookies/flash'
 require_relative './strong_params'
 require_relative './callbacks'
 
@@ -99,9 +99,9 @@ class ControllerBase
   # use ERB and binding to evaluate templates
   # pass the rendered html to render_content
   def render(template_name)
-    directory = File.expand_path(Dir.pwd)
+    directory = File.dirname(__FILE__)
     controller_name = self.class.to_s.underscore
-    path = File.join(directory, 'app', 'views', controller_name, "#{template_name}.html.erb")
+    path = File.join(directory, "..", '..', 'app', 'views', controller_name, "#{template_name}.html.erb")
     content = ERB.new(File.read(path)).result(binding)
     render_content(content, 'text/html')
   end
@@ -137,8 +137,8 @@ class ControllerBase
   end
 
   def build_content(&prc)
-    directory = File.expand_path(Dir.pwd)
-    path = File.join(directory, 'app', 'views', "application.html.erb")
+    directory = File.dirname(__FILE__)
+    path = File.join(directory, '..', '..', 'app', 'views', "application.html.erb")
     app_content = ERB.new(File.read(path)).result(binding)
   end
   

@@ -1,53 +1,5 @@
-# require_relative 'searchable'
-# require 'active_support/inflector'
-
-class AssocOptions
-  attr_accessor(
-    :foreign_key,
-    :class_name,
-    :primary_key,
-    :optional
-  )
-
-  def model_class
-    class_name.to_s.constantize
-  end
-
-  def table_name
-    model_class.table_name
-  end
-end
-
-class BelongsToOptions < AssocOptions
-  def initialize(name, options = {})
-    default = {
-      foreign_key: "#{name}_id".to_sym,
-      class_name: name.to_s.capitalize, 
-      primary_key: :id,
-      optional: false
-    }
-    default.merge!(options)
-
-    @foreign_key = default[:foreign_key]
-    @class_name = default[:class_name]
-    @primary_key = default[:primary_key]
-  end
-end
-
-class HasManyOptions < AssocOptions
-  def initialize(name, self_class_name, options = {})
-    default = {
-      foreign_key: "#{self_class_name.downcase}_id".to_sym,
-      class_name: name.to_s.capitalize.singularize,
-      primary_key: :id
-    }
-    default.merge!(options)
-
-    @foreign_key = default[:foreign_key]
-    @class_name = default[:class_name]
-    @primary_key = default[:primary_key]
-  end
-end
+require_relative 'has_many_options'
+require_relative 'belongs_to_options'
 
 module Associatable
 
@@ -60,12 +12,12 @@ module Associatable
       unless options.optional || validations.include?([options.foreign_key, true])
         self.class.validates options.foreign_key, presence: true 
       end
+      
       options.model_class.find(self.send(options.foreign_key))
     end
   end
 
   def has_many(name, options = {})
-  
     if options[:through] && options[:source]
       has_many_through(name, options[:through], options[:source])
     else
@@ -161,4 +113,5 @@ module Associatable
       source_options.model_class.parse_all(results)
     end
   end
+
 end

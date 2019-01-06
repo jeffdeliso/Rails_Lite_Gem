@@ -1,5 +1,5 @@
-require_relative '../../lib/sql_object'
+require_relative '../../lib/model/model_base'
 
-class ApplicationModel < SQLObject
+class ApplicationModel < ModelBase
 
 end 

@@ -4,16 +4,13 @@ require 'pry'
 require_relative './lib/router'
 require_relative './config/routes'
 require_relative './app/models/application_model'
-require_relative './app/models/cat'
 require_relative './app/models/user'
-require_relative './app/models/house'
 require_relative './app/controllers/application_controller'
-require_relative './app/controllers/cats_controller'
 require_relative './app/controllers/users_controller'
 require_relative './app/controllers/sessions_controller'
 
   class RL < Thor
-    
+
     desc "server", "start rails lite server"
     method_option :aliases => "s"
     def server
@@ -39,4 +36,3 @@ require_relative './app/controllers/sessions_controller'
       Pry.start(__FILE__)
     end
   end
-
