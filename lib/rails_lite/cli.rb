@@ -26,5 +26,17 @@ module RailsLite
         puts "error"
       end
     end
+
+    desc "console", "Starts the rails lite console"
+    method_option aliases: "c"
+    def console
+      root = FileUtils.pwd
+      file_name = File.join(root, 'bin', 'pry')
+      if File.exist?(file_name)
+        system('bin/pry')
+      else
+        puts "error"
+      end
+    end
   end
 end
