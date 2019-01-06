@@ -5,7 +5,8 @@ module RailsLite
 
   class CLI < Thor
     desc "new", "Creates a new rails lite project"
-    def new(*words = ['new', 'app'])
+    def new(*words)
+      words = ['new', 'app'] if words.empty?
       name = words.join('_')
       directory = File.dirname(__FILE__)
       source = File.join(directory, "..", "scaffold")
