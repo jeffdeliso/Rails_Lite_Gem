@@ -4,6 +4,7 @@ require 'fileutils'
 module RailsLite
 
   class CLI < Thor
+
     desc "new", "Creates a new rails lite project"
     method_option aliases: "n"
     def new(*words)
@@ -23,7 +24,7 @@ module RailsLite
       if File.exist?(file_name)
         system('bin/server')
       else
-        puts "error"
+        puts "Not a rails lite directory"
       end
     end
 
@@ -35,7 +36,18 @@ module RailsLite
       if File.exist?(file_name)
         system('bin/pry')
       else
-        puts "error"
+        puts "Not a rails lite directory"
+      end
+    end
+
+    desc "routes", "Displays the current routes"
+    def routes
+      root = FileUtils.pwd
+      file_name = File.join(root, 'bin', 'routes')
+      if File.exist?(file_name)
+        system('bin/routes')
+      else
+        puts "Not a rails lite directory"
       end
     end
   end

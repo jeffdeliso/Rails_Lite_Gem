@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-
 require 'rails_lite/cli'
+
 RailsLite::CLI.start

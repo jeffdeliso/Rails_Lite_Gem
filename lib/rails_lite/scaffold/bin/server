@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+require 'rack'
+require 'byebug'
+require_relative '../lib/router/router'
+require_relative '../lib/middleware/show_exceptions'
+require_relative '../lib/middleware/static'
+require_relative '../config/routes'
+Dir[File.join(__dir__, '..', 'app', 'controllers', '*.rb')].each { |file| require file }
+Dir[File.join(__dir__, '..', 'app', 'models', '*.rb')].each { |file| require file }
+
+router = Router.new
+create_routes(router)
+
+app = Proc.new do |env|
+  req = Rack::Request.new(env)
+  res = Rack::Response.new
+  router.run(req, res)
+  res.finish
+end
+
+app = Rack::Builder.new do
+  use Static
+  # use ShowExceptions
+  run app
+end.to_app
+
+Rack::Server.start(
+  app: app,
+  Port: 3000
+)

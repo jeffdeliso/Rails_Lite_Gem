@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/router/router'
+require_relative '../config/routes'
+Dir[File.join(__dir__, '..', 'app', 'controllers', '*.rb')].each { |file| require file }
+Dir[File.join(__dir__, '..', 'app', 'models', '*.rb')].each { |file| require file }
+
+router = Router.new
+create_routes(router)
+router.display_routes

@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+require 'rack'
+require 'byebug'
+require_relative '../lib/router/router'
+require_relative '../lib/middleware/show_exceptions'
+require_relative '../lib/middleware/static'
+require_relative '../config/routes'
+Dir[File.join(__dir__, '..', 'app', 'controllers', '*.rb')].each { |file| require file }
+Dir[File.join(__dir__, '..', 'app', 'models', '*.rb')].each { |file| require file }
+
+Pry.start(__FILE__)
