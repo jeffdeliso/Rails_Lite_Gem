@@ -50,5 +50,16 @@ module RailsLite
         puts "Not a rails lite directory"
       end
     end
+
+    desc "dbreset", "Resets the database"
+    def dbreset
+      root = FileUtils.pwd
+      file_name = File.join(root, 'bin', 'routes')
+      if File.exist?(file_name)
+        system('bin/dbreset')
+      else
+        puts "Not a rails lite directory"
+      end
+    end
   end
 end
