@@ -25,7 +25,6 @@ class DBConnection
   end
 
   def self.instance
-    # reset if @db.nil?
     DBConnection.open(DB_FILE)
 
     @db
