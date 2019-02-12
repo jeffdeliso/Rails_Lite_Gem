@@ -1,0 +1,16 @@
+<h1 class='page-header'>Edit <%= @band.name %></h1>
+
+<form class='form' action="<%= band_url(@band) %>" method="POST">
+  <input type="hidden" name="_method" value="PATCH">
+  <input
+    type="hidden"
+    name="authenticity_token"
+    value="<%= form_authenticity_token %>">
+
+  <p>
+    <label for='band-name'>Name</label>
+    <input id='band-name' type="text" name="band[name]" value="<%= @band.name %>">
+  </p>
+
+  <input type="submit">
+</form>

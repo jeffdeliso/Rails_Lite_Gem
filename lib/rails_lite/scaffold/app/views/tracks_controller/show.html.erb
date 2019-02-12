@@ -1,0 +1,56 @@
+<h1 class='page-header'><%= @track.name %></h1>
+
+<%= @track.lyrics %>
+
+<h4 class='sub-header'>New Note</h4>
+
+<form class='form' action="<%= notes_url %>" method="POST">
+  <input
+    type="hidden"
+    name="authenticity_token"
+    value="<%= form_authenticity_token %>">
+
+  <input type="hidden" name="note[track_id]" value="<%= @track.id %>">
+
+  <p>
+    <label for="note_content">Content</label>
+    <textarea id="note_content"
+      rows="7" cols="30"
+      name="note[content]"></textarea>
+  </p>
+
+  <input type="submit">
+</form>
+
+
+<h4 class='sub-header'>Notes</h4>
+
+<% @track.notes.each do |note| %>
+  <div class='note-item'>
+    <p><%= note.content %></p>
+    <div class='note-item-info'>
+      <p>Authored by: <%= note.user.username %></p>
+
+      <% if note.user_id == current_user.id %>
+        <form action="<%= note_url(note) %>" method="POST">
+          <input type="hidden" name="_method" value="DELETE">
+          <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" >
+          <input type="submit" value="Destroy Note">
+        </form>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<h4 class='sub-header'>Links</h4>
+<ul class='page-links'>
+  <li><a class='button' href="<%= edit_track_url(@track) %>">Edit Track</a></li>
+  <li>
+    <form action="<%= track_url(@track) %>" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" >
+      <input type="submit" value="Destroy Track">
+    </form>
+  </li>
+  <li><a class='button' href="<%= album_url(@track.album) %>"><%= @track.album.name %></a></li>
+</ul>

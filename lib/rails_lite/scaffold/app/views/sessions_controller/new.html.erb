@@ -1,15 +1,22 @@
-<h1>Log In</h1>
-<form action="<%= sessions_url %>" method="POST">
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-  <label>Username
-    <input type="text" name="user[username]" value="">
-  </label>
+<h2 class='page-header'>Sign-in</h2>
 
-  <label>Password
-    <input type="text" name="user[password]" value="">
-  </label>
+<a class='button' href=<%= new_users_url %> >Go to Sign-up!</a>
+
+<form class='form' action="<%= sessions_url %>" method="post">
+  <input
+    type="hidden"
+    name="authenticity_token"
+    value="<%= form_authenticity_token %>">
+
+  <p>
+    <label for='new-user-email'>Username</label>
+    <input id='new-user-email' type="text" name="user[username]">
+  </p>
+
+  <p>
+    <label for='new-user-password'>Password</label>
+    <input id='new-user-password' type="password" name="user[password]">
+  </p>
 
   <input type="submit">
 </form>
-
-<%= link_to("Cats", cats_url) %>

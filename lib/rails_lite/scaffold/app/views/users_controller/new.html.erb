@@ -1,13 +1,22 @@
-<h1>Sign Up</h1>
-<form action="<%= users_url %>" method="POST">
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-  <label>Username
-    <input type="text" name="user[username]" value="<%= @user.username %>">
-  </label>
+<h1 class='page-header'>New User</h1>
 
-  <label>Password
-    <input type="text" name="user[password]" value="">
-  </label>
+<a class='button' href=<%= new_sessions_url %> >Go to sign-in</a>
 
-  <input type="submit">
+<form class='form' action="<%= users_url %>" method="post">
+  <input
+    type="hidden"
+    name="authenticity_token"
+    value="<%= form_authenticity_token %>">
+
+  <p>
+    <label for='new-user-email'>Username</label>
+    <input id='new-user-email' type="text" name="user[username]">
+  </p>
+
+  <p>
+    <label for='new-user-password'>Password</label>
+    <input id='new-user-password' type="password" name="user[password]">
+  </p>
+
+  <input type="submit" value="Submit">
 </form>

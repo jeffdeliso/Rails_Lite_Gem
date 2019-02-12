@@ -20,7 +20,7 @@ class ApplicationController < ControllerBase
   def ensure_logout
     if logged_in?
       flash[:errors] = ['already logged in']
-      redirect_to cats_url
+      redirect_to bands_url
 
       true
     else

@@ -3,10 +3,12 @@ require 'active_support/core_ext'
 require 'erb'
 require 'active_support/inflector'
 require 'json'
+require 'jbuilder'
 require_relative './cookies/session'
 require_relative './cookies/flash'
 require_relative './strong_params'
 require_relative './controller_callbacks'
+require_relative './format'
 require_relative '../utils/url_helpers'
 
 class ControllerBase
@@ -68,10 +70,19 @@ class ControllerBase
 
   def render(options)
     if options.is_a?(Symbol)
-      render_template(options)
+      if File.exist?(html_view_path(options))
+        render_template(options)
+      else
+        render_json_template(options)
+      end
     else
       render_json(options[:json])
     end
+  end
+
+  def respond_to(&prc)
+    format = new Format(self)
+    prc.call(format)
   end
 
   def session
@@ -85,21 +96,33 @@ class ControllerBase
   private
 
   def render_json(obj)
-    content = obj.attributes.to_json
+    if obj.is_a?(Array)
+      content = Jbuilder.encode do |json|
+        json.array! obj
+      end
+    else
+      # content = Jbuilder.encode do |json|
+      #   json.child! obj
+      # end
+      content = obj.attributes.to_json
+    end
+
+    render_content(content, 'application/json')
+  end
+
+  def render_json_template(template_name)
+    path = json_view_path(template_name)
+    file_content = "<%= #{File.read(path)} %>"
+    content = ERB.new(file_content).result(binding)
+
     render_content(content, 'application/json')
   end
 
   def render_template(template_name)
-    directory = File.dirname(__FILE__)
-    controller_name = self.class.to_s.underscore
-    path = File.join(
-      directory, "..", '..',
-      'app', 'views', controller_name,
-      "#{template_name}.html.erb"
-    )
-      
+    path = html_view_path(template_name)
     content = ERB.new(File.read(path)).result(binding)
     app_content = build_content { content }
+
     render_content(app_content, 'text/html')
   end
 
@@ -112,6 +135,7 @@ class ControllerBase
 
     res['Content-Type'] = content_type
     res.write(content)
+
     nil
   end
 
@@ -142,6 +166,26 @@ class ControllerBase
 
   def protect_from_forgery?
     @@protect_from_forgery ||= false
+  end
+
+  def json_view_path(name)
+    directory = File.dirname(__FILE__)
+    controller_name = self.class.to_s.underscore
+    File.join(
+          directory, "..", '..',
+          'app', 'views', controller_name,
+          "#{name}.json.jbuilder"
+    )
+  end
+
+  def html_view_path(name)
+    directory = File.dirname(__FILE__)
+    controller_name = self.class.to_s.underscore
+    File.join(
+          directory, "..", '..',
+          'app', 'views', controller_name,
+          "#{name}.html.erb"
+    )
   end
 end
 

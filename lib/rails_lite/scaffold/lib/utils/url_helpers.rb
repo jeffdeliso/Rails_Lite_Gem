@@ -55,6 +55,7 @@ module UrlHelpers
     end
 
     def make_idless_helper_name(url_arr)
+      url_arr = url_arr.dup
        if url_arr.last == "edit" || url_arr.last == "new"
         url_arr.unshift(url_arr.pop) 
       end

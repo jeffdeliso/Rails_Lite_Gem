@@ -1,29 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/public/main.css" />
   </head>
 
   <body>
-    <% if flash[:errors] %>
-      <ul>
-        <% flash[:errors].each do |error| %>
-          <li><%= error %></li>
-        <% end %>
-      </ul>
-    <% end %>
-    
-    <% if logged_in? %>
-      <h1>User: <%= current_user.username %></h1>
-      <form action="<%= sessions_url %>" method="POST">
-        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
-        <input type="hidden" name="_method" value="delete">
-        <input type="submit" value="Logout">
-      </form>
-    <% else %>
-      <a href="<%= new_users_url %>">Sign Up</a>
-      <a href="<%= new_sessions_url %>">Log In</a>
-    <% end %>
+    <div class='main-content'>
+      <h1 class='main-logo'>Music App</h1>
 
-    <%= yield %>
+      <% if logged_in? %>
+        <nav>
+          <a class='button' href="<%= bands_url %>">Take me Home</a>
+          
+          <div class='user-detail'>
+            <p>Logged in as: <%= current_user.username %></p>
+          <form action=<%= sessions_url %> method='post'>
+            <input
+              type="hidden"
+              name="_method"
+              value="delete">
+            <input
+              type="hidden"
+              name="authenticity_token"
+              value="<%= form_authenticity_token %>">
+            <input 
+              type="submit" value="Sign Out">
+          </form>
+          </div>
+        </nav>
+      <% end %>
+
+      <% if flash[:errors] %>
+        <p><%= flash[:errors].join(", ") %></p>
+      <% end %>
+
+      <%= yield %>
+    </div>
   </body>
 </html>
