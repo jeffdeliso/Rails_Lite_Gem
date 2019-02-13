@@ -38,6 +38,16 @@ Or install it yourself as:
 To create a new project navigate the directory you would like to create the project and run:
 
     $ railslite new [PROJECT_NAME]
+    
+To start a local server run either:
+
+    $ railslite server
+    $ railslite s
+    
+To open pry for your project run either:
+
+    $ railslite console
+    $ railslite c
 
 ### Database
 
@@ -47,7 +57,7 @@ RailsLite's ORM works with SQLite, so you will need to edit the `db/database.sql
 
 ### Routes
 
-Routes go in the `config/routes.rb` file. Routes work exactly like they do in rails.
+Routes go in the `config/routes.rb` file. Routes work exactly like they do in rails. 
 
 ```ruby
 root to: 'bands#index'
@@ -78,9 +88,13 @@ patch '/[CUSTOM_ROUTE]/:id', to: 'notes#[CUSTOM_METHOD]'
 get '/[CUSTOM_ROUTE]', to: 'notes#[CUSTOM_METHOD]'
 ```
 
+URL helper methods are created for your routes. To view these methods and all of your routes run:
+
+    $ railslite routes
+    
 ### Models
 
-Models go in `app/models` and inherit from ApplicationModel.  You can add methods to ApplicationModel at `app/models/application_model.rb`. Models have access to validations on presence, uniqueness and length, as well as, the lifecyle methods `after_initialize` and `before_validation`. Models also can have `belongs_to`, `has_many` and `has_one` using the same syntax as rails.
+Models go in `app/models` and inherit from ApplicationModel.  You can add methods to ApplicationModel at `app/models/application_model.rb`. Models have access to validations on presence, uniqueness and length, as well as, the lifecyle methods `after_initialize` and `before_validation`. Models also can have `belongs_to`, `has_many` and `has_one` using the same syntax as rails. Creating a `belongs_to` association will automatically create a validation for the presence of the `foreign_key` unless `optional: true` is included.
 
 ```ruby
 require 'bcrypt'
@@ -126,6 +140,100 @@ class User < ApplicationModel
   end
 end
 ```
+
+### Controllers
+
+Models go in `app/controllers` and inherit from ApplicationController. You can add methods to ApplicationController at `app/controllers/application_model.rb`. Contoller methods will automatically render their corrosponding view if no render or redirect is specified. Controllers also support strong params and have a `before_action` lifecycle method. Including `protect_from_forgery` in a controller will implement CSRF protection. Include `<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">` in any of your forms when `protect_from_forgery` is enabled.
+
+```ruby
+class BandsController < ApplicationController
+  protect_from_forgery
+  
+  def index
+    @bands = Band.all
+  end
+
+  def show
+    @band = Band.find(params[:id])
+  end
+
+  def new
+    @band = Band.new
+  end
+
+  def create
+    @band = Band.new(band_params)
+
+    if @band.save
+      redirect_to band_url(@band)
+    else
+      flash.now[:errors] = @band.errors.full_messages
+      render :new
+    end
+  end
+
+  def edit
+    @band = Band.find(params[:id])
+  end
+
+  def update
+    @band = Band.find(params[:id])
+    if @band.update_attributes(band_params)
+      redirect_to band_url(@band)
+    else
+      flash.now[:errors] = @band.errors.full_messages
+      render :edit
+    end
+  end
+
+  def destroy
+    @band = Band.find(params[:id])
+    @band.destroy
+    redirect_to bands_url
+  end
+
+  def json
+    @bands = Band.all
+  end
+
+  private
+  
+  def band_params
+    params.require(:band).permit(:name)
+  end
+
+  before_action :ensure_login
+end
+
+```
+
+### Views
+
+Create your views at `app/views/[CONTROLLER_NAME]/[ACTION].html.erb` or `app/views/[CONTROLLER_NAME]/[ACTION].json.jbuilder`. Place any code you want shared between all your HTML views in `app/views/application.html.erb`.
+
+```ruby
+<h1 class='page-header'>Bands</h1>
+
+<ul class='main-list'>
+  <% @bands.each do |band| %>
+    <li><a href="<%= band_url(band) %>"><p><%= band.name %></p></a></li>
+  <% end %>
+</ul>
+
+<h4 class='sub-header'>Links</h4>
+<ul class='page-links'>
+  <li><a class='button' href="<%= new_bands_url %>" >New band</a></li>
+</ul>
+```
+```ruby
+Jbuilder.encode do |json|
+  json.array! @bands
+end
+```
+
+### ORM
+
+
 
 ## Contributing
 
