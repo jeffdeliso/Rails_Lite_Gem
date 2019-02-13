@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Jeff DeLiso"]
   spec.email         = ["jeff.deliso@gmail.com"]
 
-  spec.summary       = %q{A lite version a rails.}
-  spec.description   = %q{A lite version a rails.}
+  spec.summary       = %q{RailsLite is an MVC framework for building web applications.  This was built for educational purposes.}
+  spec.description   = %q{RailsLite is an MVC framework for building web applications.  This was built for educational purposes.}
   spec.homepage      = "https://github.com/jeffdeliso/Rails_Lite_Gem"
   spec.license       = "MIT"
 
