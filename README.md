@@ -1,6 +1,6 @@
 # RailsLite
 
-Lyle is an MVC framework for building web applications. Some features include:
+RailsLite is an MVC framework for building web applications. Some features include:
 
 * SQLite or PostgreSQL ORM with associations and search
 * Controllers with Session and Flash Management
@@ -33,13 +33,99 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Creating a Project
 
-## Development
+To create a new project navigate the directory you would like to create the project and run:
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+    $ railslite new [PROJECT_NAME]
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+### Database
+
+RailsLite's ORM works with SQLite, so you will need to edit the `db/database.sql` file to reflect your schema and include your seeds. Then run:
+
+    $ railslite dbreset
+
+### Routes
+
+Routes go in the `config/routes.rb` file. Routes work exactly like they do in rails.
+
+```ruby
+root to: 'bands#index'
+
+resource :sessions, only: [:new, :create, :destroy]
+
+resources :users, only: [:show, :new, :create] do
+  member do 
+    get :[CUSTOM_ROUTE]
+  end
+end
+
+resources :bands do
+  collection do
+    get :[CUSTOM_ROUTE]
+  end
+  resources :albums, only: [:new]
+end
+
+resources :albums, except: [:index, :new] do
+  resources :tracks, only: [:new]
+end
+
+resources :tracks, only: [:show, :create, :edit, :update, :destroy,]
+
+resources :notes, only: [:create, :destroy]
+patch '/[CUSTOM_ROUTE]/:id', to: 'notes#[CUSTOM_METHOD]'
+get '/[CUSTOM_ROUTE]', to: 'notes#[CUSTOM_METHOD]'
+```
+
+### Models
+
+Models go in `app/models` and inherit from ApplicationModel.  You can add methods to ApplicationModel at `app/models/application_model.rb`. Models have access to validations on presence, uniqueness and length, as well as, the lifecyle methods `after_initialize` and `before_validation`. Models also can have `belongs_to`, `has_many` and `has_one` using the same syntax as rails.
+
+```ruby
+require 'bcrypt'
+
+class User < ApplicationModel
+  validates :username, presence: true, uniqueness: true
+  validates :password_digest, presence: true
+  validates :password, length: { minimum: 6, allow_nil: true }
+  validates :session_token, presence: true, uniqueness: true
+
+  has_many :notes
+
+  after_initialize :ensure_token
+  
+  attr_reader :password
+  
+  def self.find_by_credentials(username, password)
+    user = User.find_by(username: username)
+    user && user.is_password?(password) ? user : nil
+  end
+  
+  def self.generate_token
+    SecureRandom::urlsafe_base64
+  end
+  
+  def password=(password)
+    @password = password
+    self.password_digest = BCrypt::Password.create(password)
+  end
+  
+  def ensure_token
+    self.session_token ||= User.generate_token
+  end
+  
+  def reset_token!
+    self.session_token = User.generate_token
+    self.save!
+    self.session_token
+  end
+  
+  def is_password?(password)
+    BCrypt::Password.new(self.password_digest).is_password?(password)
+  end
+end
+```
 
 ## Contributing
 
