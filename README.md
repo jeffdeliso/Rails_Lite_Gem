@@ -1,8 +1,19 @@
 # RailsLite
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rails_lite`. To experiment with that code, run `bin/console` for an interactive prompt.
+Lyle is an MVC framework for building web applications. Some features include:
 
-TODO: Delete this and the text above, and describe your gem
+* SQLite or PostgreSQL ORM with associations and search
+* Controllers with Session and Flash Management
+* CSRF Protetion
+* Static Asset Rendering
+* Restful and Custom Routing
+* URL Helper Methods
+* Server
+* Model Validations
+* Model and Controller Callbacks
+* JBuilder and HTML Views
+
+For an example, visit: [https://github.com/jeffdeliso/rails_lite_sample_app](https://github.com/jeffdeliso/rails_lite_sample_app)
 
 ## Installation
 
