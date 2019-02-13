@@ -167,7 +167,7 @@ class BandsController < ApplicationController
     if @band.save
       redirect_to band_url(@band)
     else
-      flash.now[:errors] = @band.errors.full_messages
+      flash.now[:errors] = @band.errors
       render :new
     end
   end
@@ -181,7 +181,7 @@ class BandsController < ApplicationController
     if @band.update_attributes(band_params)
       redirect_to band_url(@band)
     else
-      flash.now[:errors] = @band.errors.full_messages
+      flash.now[:errors] = @band.errors
       render :edit
     end
   end
@@ -231,8 +231,30 @@ Jbuilder.encode do |json|
 end
 ```
 
-### ORM
+### Relation
 
+RailsLite includes a `Relation` class that searches the database with SQL queiries similar to active record.  The Relation methods include:
+
+* `where`
+* `joins`
+* `left_joins`
+* `select`
+* `find_by`
+* `find`
+* `first`
+* `last`
+* `all`
+* `save`
+* `save!`
+* `update`
+* `update_attributes`
+* `destroy`
+
+Relation methods are lazy and stackable.  For example:
+
+```ruby
+User.joins(:bands).where(band_id: 1)
+```
 
 
 ## Contributing
