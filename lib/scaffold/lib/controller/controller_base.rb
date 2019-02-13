@@ -101,9 +101,7 @@ class ControllerBase
         json.array! obj
       end
     else
-      # content = Jbuilder.encode do |json|
-      #   json.child! obj
-      # end
+
       content = obj.attributes.to_json
     end
 

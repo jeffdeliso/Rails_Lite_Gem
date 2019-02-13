@@ -1,4 +1,5 @@
 class NotesController < ApplicationController
+  protect_from_forgery
   
   def create
     note = Note.new(note_params)

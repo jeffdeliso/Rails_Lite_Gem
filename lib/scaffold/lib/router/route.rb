@@ -13,6 +13,7 @@ class Route
   def run(req, res, patterns)
     route_params = {}
     match_data = pattern.match(req.path)
+    
     match_data.names.each do |key|
       route_params[key] = match_data[key]
     end

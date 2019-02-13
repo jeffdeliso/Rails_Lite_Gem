@@ -1,5 +1,6 @@
 class BandsController < ApplicationController
-
+  protect_from_forgery
+  
   def index
     @bands = Band.all
     render :index

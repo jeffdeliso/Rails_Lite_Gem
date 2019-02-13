@@ -8,7 +8,6 @@ class User < ApplicationModel
 
   has_many :notes
 
-  # before_validation :ensure_token
   after_initialize :ensure_token
   
   attr_reader :password

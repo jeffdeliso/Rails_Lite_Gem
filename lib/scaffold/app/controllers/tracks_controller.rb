@@ -1,5 +1,6 @@
 class TracksController < ApplicationController
-
+  protect_from_forgery
+  
   def show
     @track = Track.find(params[:id])
     render :show
