@@ -8,7 +8,6 @@ require_relative './cookies/session'
 require_relative './cookies/flash'
 require_relative './strong_params'
 require_relative './controller_callbacks'
-require_relative './format'
 require_relative '../utils/url_helpers'
 
 class ControllerBase
@@ -78,11 +77,6 @@ class ControllerBase
     else
       render_json(options[:json])
     end
-  end
-
-  def respond_to(&prc)
-    format = new Format(self)
-    prc.call(format)
   end
 
   def session
