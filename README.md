@@ -1,6 +1,6 @@
 # RailsLite
 
-RailsLite is a MVC framework for building web applications. Some features include:
+[RailsLite](https://rubygems.org/gems/rails_lite) is a MVC framework for building web applications. Some features include:
 
 * SQLite or PostgreSQL ORM with associations and search
 * Controllers with Session and Flash Management
