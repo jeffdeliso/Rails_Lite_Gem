@@ -6,7 +6,7 @@ RailsLite is a MVC framework for building web applications. Some features includ
 * Controllers with Session and Flash Management
 * CSRF Protetion
 * Static Asset Rendering
-* Restful and Custom Routing
+* RESTful and Custom Routing
 * URL Helper Methods
 * Server
 * Model Validations
